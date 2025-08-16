@@ -1,0 +1,46 @@
+<odoo>
+    <record id="view_clinic_doctor_list" model="ir.ui.view">
+        <field name="name">clinic.doctor.list</field>
+        <field name="model">clinic.doctor</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="mutaxasislik"/>
+                <field name="xona_raqami"/>
+                <field name="amaliy_tajriba"/>
+                <field name="til"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_clinic_doctor_form" model="ir.ui.view">
+        <field name="name">clinic.doctor.form</field>
+        <field name="model">clinic.doctor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="mutaxasislik"/>
+                        <field name="xona_raqami"/>
+                        <field name="amaliy_tajriba"/>
+                        <field name="til"/>
+                        <field name="litsenziya"/>
+                        <field name="ish_rejemi"/>
+                    </group>
+                    <notebook>
+                        <page string="Qabul">
+                            <field name="appointment_ids">
+                                <list>
+                                    <field name="patient_id"/>
+                                    <field name="start_time"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
