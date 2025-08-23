@@ -1,0 +1,23 @@
+<odoo>
+    <record id="view_clinic_doctor_list" model="ir.ui.view">
+        <field name="name">clinic.doctor.list</field>
+        <field name="model">clinic.doctor</field>
+        <field name="arch" type="xml">
+            <list string="Doctors List">
+                <field name="name"/>
+                <field name="mutaxasislik"/>
+                <field name="xona_raqami"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_clinic_doctor" model="ir.actions.act_window">
+        <field name="name">Doctors List</field>
+        <field name="res_model">clinic.doctor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="clinic_root_menu" name="Clinic"/>
+    <menuitem id="menu_clinic_doctor" name="Doctors List" parent="clinic_root_menu"
+              action="action_clinic_doctor"/>
+</odoo>

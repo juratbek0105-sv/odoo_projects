@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="ecommercy2.list">
+      <field name="name">ecommercy2 list</field>
+      <field name="model">ecommercy2.ecommercy2</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </list>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="ecommercy2.action_window">
+      <field name="name">ecommercy2 window</field>
+      <field name="res_model">ecommercy2.ecommercy2</field>
+      <field name="view_mode">list,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="ecommercy2.action_server">
+      <field name="name">ecommercy2 server</field>
+      <field name="model_id" ref="model_ecommercy2_ecommercy2"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "list,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="ecommercy2" id="ecommercy2.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="ecommercy2.menu_1" parent="ecommercy2.menu_root"/>
+    <menuitem name="Menu 2" id="ecommercy2.menu_2" parent="ecommercy2.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="ecommercy2.menu_1_list" parent="ecommercy2.menu_1"
+              action="ecommercy2.action_window"/>
+    <menuitem name="Server to list" id="ecommercy2" parent="ecommercy2.menu_2"
+              action="ecommercy2.action_server"/>
+-->
+  </data>
+</odoo>
