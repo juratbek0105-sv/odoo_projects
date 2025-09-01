@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_service_country,user_service_country,model_service_country,base.group_user,1,1,1,1
+access_service_state,user_service_state,model_service_state,base.group_user,1,1,1,1
+access_service_district,user_service_district,model_service_district,base.group_user,1,1,1,1
+access_service_center,user_service_center,model_service_center,base.group_user,1,1,1,1
+access_service_technician,user_service_technician,model_service_technician,base.group_user,1,1,1,1
+access_service_customer,user_service_customer,model_service_customer,base.group_user,1,1,1,1
+access_service_part,user_service_part,model_service_part,base.group_user,1,1,1,1
+access_service_order,user_service_order,model_service_order,base.group_user,1,1,1,1
+access_service_order_line,user_service_order_line,model_service_order_line,base.group_user,1,1,1,1
+access_service_payment,user_service_payment,model_service_payment,base.group_user,1,1,1,1
+access_service_rating,user_service_rating,model_service_rating,base.group_user,1,1,1,1
