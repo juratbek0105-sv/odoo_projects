@@ -23,9 +23,9 @@ class Product(models.Model):
 
     def write(self, vals):
         for record in self:
-            old_name = vals.name
-            old_price = vals.price
-            old_quantity = vals.quantity
+            old_name = record.name
+            old_price = record.price
+            old_quantity = record.quantity
 
             result = super(Product, self).write(vals)
 
