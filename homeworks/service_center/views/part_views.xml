@@ -1,0 +1,49 @@
+<!-- service_part_views.xml -->
+<odoo>
+    <!-- List View -->
+    <record id="view_service_part_list" model="ir.ui.view">
+        <field name="name">service.part.list</field>
+        <field name="model">service.part</field>
+        <field name="arch" type="xml">
+            <list string="Service Parts">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_service_part_form" model="ir.ui.view">
+        <field name="name">service.part.form</field>
+        <field name="model">service.part</field>
+        <field name="arch" type="xml">
+            <form string="Service Part">
+                <header>
+                    <button name="action_activate" type="object" string="Activate" invisible="not is_active"/>
+                    <button name="action_deactivate" type="object" string="Deactivate" invisible="is_active"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="is_active"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_service_part" model="ir.actions.act_window">
+        <field name="name">Parts</field>
+        <field name="res_model">service.part</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_service_part_root"
+              name="Service Parts"
+              action="action_service_part" parent="menu_service_center_root"/>
+</odoo>

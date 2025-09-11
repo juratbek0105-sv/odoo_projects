@@ -2,141 +2,136 @@ from odoo import models, fields, api
 from datetime import date
 
 class ServiceCountry(models.Model):
-    _name = "service.countryr"
+    _name = "service.country"
     _description = "Servis davlati"
 
-    name = fields.Char()  #Davlat nomi
-    code = fields.Integer() #davlat kodi
-    phone_code = fields.Char()   # Telefon kodi
-    is_active = fields.Boolean()  #Faol davlat
+    name = fields.Char(required=True)
+    code = fields.Integer()
+    phone_code = fields.Char()
+    is_active = fields.Boolean(default=True)
 
-    state_ids = fields.One2many("service.state", "country_id") #viloyatlar    state_ids = fields.One2many("service.state") #viloyatlar
+    state_ids = fields.One2many("service.state", "country_id")
     district_ids = fields.One2many("service.district", "country_id")
-    center_ids = fields.One2many("service.center", "country_id") #Servis markazlari
+    center_ids = fields.One2many("service.center", "country_id")
     technician_ids = fields.One2many("service.technician", "country_id")
 
-    technician_count = fields.Integer(computed="_compute_technician_count") #Ustalar soni
-    state_count = fields.Integer(computed="_compute_state_count") #Viloyatlar soni
-    center_count = fields.Integer(computed="_compute_center_count") #Servis markazlari soni
-    active_order_ids = fields.Many2many("service.order", computed="_compute_active_order_ids") #Faol buyurtmalar
-    active_order_count = fields.Integer(computed="_compute_active_order_count") #Faol buyurtmalar soni
-    done_order_ids = fields.Many2many("service.order", computed="_compute_done_order_ids") #  Yakunlangan buyurtmalar
-    done_order_count = fields.Integer(computed="_compute_done_order_count") #  Jami tushum
-    today_order_ids = fields.Many2many("service.order", "country_id", compute="_compute_today_order_ids")
-    today_order_count = fields.Integer(compute = "_compute_today_order_count")
-    total_revenue = fields.Char(compute="_compute_total_revenue")
-    avg_rating = fields.Float(computed="_compute_avg_rating") #O'rtacha baho
-    last_order_date = fields.Date(computed="_compute_last_order_date") #Oxirgi buyurtma sanasi
+    technician_count = fields.Integer(compute="_compute_technician_count")
+    state_count = fields.Integer(compute="_compute_state_count")
+    center_count = fields.Integer(compute="_compute_center_count")
+    active_order_ids = fields.Many2many("service.order", compute="_compute_active_order_ids")
+    active_order_count = fields.Integer(compute="_compute_active_order_count")
+    done_order_ids = fields.Many2many("service.order", compute="_compute_done_order_ids")
+    done_order_count = fields.Integer(compute="_compute_done_order_count")
+    today_order_ids = fields.Many2many("service.order", compute="_compute_today_order_ids")
+    today_order_count = fields.Integer(compute="_compute_today_order_count")
+    total_revenue = fields.Float(compute="_compute_total_revenue")
+    avg_rating = fields.Float(compute="_compute_avg_rating")
+    last_order_date = fields.Date(compute="_compute_last_order_date")
 
     def _compute_technician_count(self):
-        for record in self:
-            record.technician_count  = len(record.technician_ids)
+        for rec in self:
+            rec.technician_count = len(rec.technician_ids)
 
     def _compute_state_count(self):
-        for record in self:
-            record.state_count = len(record.state_ids)
-
-
+        for rec in self:
+            rec.state_count = len(rec.state_ids)
 
     def _compute_center_count(self):
-        for record in self:
-            record.center_count = len(record.center_ids)
-
+        for rec in self:
+            rec.center_count = len(rec.center_ids)
 
     def _compute_active_order_ids(self):
-        for record in self:
-            active_orders = self.env["service.order"].search([
-                ("center_id.country_id", "=", record.id),
-                ("state", "in", ["receive","diagnosed", "in progress"])
+        for rec in self:
+            orders = self.env["service.order"].search([
+                ("center_id.country_id", "=", rec.id),
+                ("state", "in", ["received","diagnosed","in_progress"])
             ])
-            active_order_ids = active_orders.ids
+            rec.active_order_ids = orders
 
-            record.active_order_ids = [
-                Command.set(active_order_ids)
-            ]
     def _compute_active_order_count(self):
-        for record in self:
-            record.active_order_count = len(record.active_order_ids)
+        for rec in self:
+            rec.active_order_count = len(rec.active_order_ids)
 
     def _compute_done_order_ids(self):
-        for record in self:
-            record.done_order_ids = record.center_ids.mapped("order_ids").filtered(lambda x: x.state == "done")
+        for rec in self:
+            orders = self.env["service.order"].search([
+                ("center_id.country_id", "=", rec.id),
+                ("state", "=", "done")
+            ])
+            rec.done_order_ids = orders
 
     def _compute_done_order_count(self):
-        for record in self:
-            record.done_order_count = len(record.done_order_ids)
+        for rec in self:
+            rec.done_order_count = len(rec.done_order_ids)
 
     def _compute_today_order_ids(self):
-        for record in self:
-            record.today_order_ids = self.env["service.order"].search([
-                ("center_id.country_id", "in", record.id),
-                ("order_date" "=", date.today())
+        today = date.today()
+        for rec in self:
+            orders = self.env["service.order"].search([
+                ("center_id.country_id", "=", rec.id),
+                ("order_date", "=", today)
             ])
+            rec.today_order_ids = orders
 
     def _compute_today_order_count(self):
-        for record in self:
-            record.today_order_count  = len(record.today_order_ids)
-
+        for rec in self:
+            rec.today_order_count = len(rec.today_order_ids)
 
     def _compute_total_revenue(self):
-        for record in self:
+        for rec in self:
             payments = self.env["service.payment"].search([
-                ("center_id.country_id", "in", record.id)
+                ("order_id.center_id.country_id", "=", rec.id),
+                ("state", "=", "confirmed")
             ])
-            record.total_revenue = sum(payments.mapped("amount"))
+            rec.total_revenue = sum(payments.mapped("amount"))
 
     def _compute_avg_rating(self):
-        for record in self:
+        for rec in self:
             ratings = self.env["service.order.rating"].search([
-                ("center_id", "in", record.id)
+                ("center_id.country_id", "=", rec.id)
             ])
             scores = ratings.mapped("score")
-            record.avg_rating = sum(scores) / len(scores)
+            rec.avg_rating = sum(scores)/len(scores) if scores else 0
 
     def _compute_last_order_date(self):
-        for record in self:
+        for rec in self:
             orders = self.env["service.order"].search([
-                ("center_id.country_id", "in", record.id)
+                ("center_id.country_id", "=", rec.id)
             ])
             dates = orders.mapped("order_date")
-            record.last_order_date = max(dates)
-
+            rec.last_order_date = max(dates) if dates else False
 
     def action_activate(self):
-
-        self.write({"is_active": True})
-
+        self.is_active = True
 
     def action_deactivate(self):
+        self.is_active = False
 
-        self.write({"is_active": False})
-
-    def action_deactivate_idle_centers(self):
+    def action_deactivate_empty_centers(self):
         for record in self:
-            idle_centers = self.env["service.center"].search([
-                ("country_id", "in", record.id),
+            centers = self.env["service.center"].search([
+                ("country_id", "=", record.id),
                 ("id", "not in", record.active_order_ids.mapped("center_id").ids)
             ])
-            idle_centers.write({"is_active":False})
-
+            centers.write({"is_active": False})
 
     def action_cleanup_zero_payments(self):
         for record in self:
-            zero_payments = self.env["service.payments"].search([
-                ("order_id.center_id.country_id", "in", record.id),
+            zero_payments = self.env["service.payment"].search([
+                ("center_id.country_id", "=", record.id),
                 ("amount", "=", 0)
             ])
             zero_payments.unlink()
 
-    def action_finish_all_in_progress(self):
+    def action_finish_in_progress_orders(self):
         for record in self:
-            in_proggress_orders = self.env["service.order"].search([
-                ("center_id.country_id", "in", record.id),
+            in_progress_orders = self.env["service.order"].search([
+                ("center_id.country_id", "=", record.id),
                 ("state", "=", "in_progress")
             ])
-            in_proggress_orders.write({"state":"done"})
+            in_progress_orders.write({"state": "done"})
 
     _sql_constraints = [
-        ("country_name_uniq", "unique(name)", "Davlat nomi takrorlanmasligig kerak"),
+        ("country_name_uniq", "unique(name)", "Davlat nomi takrorlanmasligi kerak"),
         ("country_code_uniq", "unique(code)", "Davlat kodi takrorlanmas bo‘lishi kerak")
     ]

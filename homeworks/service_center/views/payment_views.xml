@@ -1,0 +1,69 @@
+<odoo>
+    <!-- LIST VIEW -->
+    <record id="view_service_payment_list" model="ir.ui.view">
+        <field name="name">service.payment.list</field>
+        <field name="model">service.payment</field>
+        <field name="arch" type="xml">
+            <list string="Payments">
+                <field name="name"/>
+                <field name="center_id"/>
+                <field name="order_id"/>
+                <field name="customer_id"/>
+                <field name="amount"/>
+                <field name="payment_date"/>
+                <field name="method"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="view_service_payment_form" model="ir.ui.view">
+        <field name="name">service.payment.form</field>
+        <field name="model">service.payment</field>
+        <field name="arch" type="xml">
+            <form string="Payment">
+                <header>
+                    <button name="action_confirm" type="object" string="Activate"
+                            class="btn-primary"/>
+                    <button name="action_cancel" type="object" string="Deactivate"
+                            class="btn-secondary"/>
+                    <button name="action_reset_draft" type="object" string="Reset to Draft"
+                            modifiers="{'invisible': [('state', '=', 'draft')]}"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="center_id"/>
+                            <field name="order_id"/>
+                            <field name="customer_id" readonly="1"/>
+                            <field name="payment_date"/>
+                            <field name="method"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="order_total" readonly="1"/>
+                            <field name="order_balance_due" readonly="1"/>
+                            <field name="customer_total_payment" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_service_payment" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="res_model">service.payment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- MENU -->
+    <menuitem id="menu_service_payment"
+              name="Payments"
+              action="action_service_payment" parent="menu_service_center_root"/>
+</odoo>

@@ -1,0 +1,117 @@
+<odoo>
+    <record id="view_service_customer_list" model="ir.ui.view">
+        <field name="name">service.customer.list</field>
+        <field name="model">service.customer</field>
+        <field name="arch" type="xml">
+            <list string="Customers">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="mobile"/>
+                <field name="email"/>
+                <field name="order_count"/>
+                <field name="active_order_count"/>
+                <field name="done_order_count"/>
+                <field name="balance_due"/>
+                <field name="avg_rating"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_service_customer_form" model="ir.ui.view">
+        <field name="name">service.customer.form</field>
+        <field name="model">service.customer</field>
+        <field name="arch" type="xml">
+            <form string="Customer">
+                <header>
+                    <button name="action_close_debt" type="object" class="btn-primary"
+                            string="Close Debt"/>
+                    <button name="action_cleanup_zero_payments" type="object"
+                            string="Cleanup Zero Payments"/>
+                    <button name="action_cleanup_cancelled_orders" type="object"
+                            string="Cleanup Cancelled Orders"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                        </group>
+                        <group>
+                            <field name="order_count" readonly="1"/>
+                            <field name="active_order_count" readonly="1"/>
+                            <field name="done_order_count" readonly="1"/>
+                            <field name="today_order_count" readonly="1"/>
+                            <field name="total_payment" readonly="1"/>
+                            <field name="balance_due" readonly="1"/>
+                            <field name="avg_rating" readonly="1"/>
+                            <field name="last_order_date" readonly="1"/>
+                            <field name="last_payment_date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Orders">
+                            <field name="order_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="order_date"/>
+                                    <field name="state"/>
+                                    <field name="total_amount"/>
+                                    <field name="balance_due"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Active Orders">
+                            <field name="active_order_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="order_date"/>
+                                    <field name="state"/>
+                                    <field name="total_amount"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Done Orders">
+                            <field name="done_order_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="order_date"/>
+                                    <field name="total_amount"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Today Orders">
+                            <field name="today_order_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="order_date"/>
+                                    <field name="total_amount"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+    <!-- Action -->
+    <record id="action_service_customer" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">service.customer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_service_customer"
+              name="Customers"
+              action="action_service_customer" parent="menu_service_center_root"/>
+</odoo>

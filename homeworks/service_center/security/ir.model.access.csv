@@ -9,4 +9,4 @@ access_service_part,user_service_part,model_service_part,base.group_user,1,1,1,1
 access_service_order,user_service_order,model_service_order,base.group_user,1,1,1,1
 access_service_order_line,user_service_order_line,model_service_order_line,base.group_user,1,1,1,1
 access_service_payment,user_service_payment,model_service_payment,base.group_user,1,1,1,1
-access_service_rating,user_service_rating,model_service_rating,base.group_user,1,1,1,1
+access_service_order_rating,access_service_order_rating,model_service_order_rating,,1,1,1,1

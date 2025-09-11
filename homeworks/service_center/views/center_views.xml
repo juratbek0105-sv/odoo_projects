@@ -1,148 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-  <record id="view_service_center_tree" model="ir.ui.view">
-    <field name="name">service.center.tree</field>
-    <field name="model">service.center</field>
-    <field name="arch" type="xml">
-      <list>
-        <field name="name"/>
-        <field name="code"/>
-        <field name="is_active"/>
-        <field name="state_id"/>
-        <field name="district_id"/>
-        <field name="capacity_per_day"/>
-        <field name="active_order_count"/>
-        <field name="utilization_rate"/>
-        <field name="total_revenue"/>
-        <field name="avg_rating"/>
-        <field name="last_order_date"/>
-      </list>
-    </field>
-  </record>
-
-  <record id="view_service_center_form" model="ir.ui.view">
-    <field name="name">service.center.form</field>
-    <field name="model">service.center</field>
-    <field name="arch" type="xml">
-      <form string="Servis markazi">
-        <header>
-          <button name="action_activate" type="object" string="Faol qilish" attrs="{'invisible':[('is_active','=',True)]}" class="btn-primary"/>
-          <button name="action_deactivate" type="object" string="Faolsizlantirish" attrs="{'invisible':[('is_active','=',False)]}"/>
-          <button name="action_cleanup_zero_payments" type="object" string="0 summali to‘lovlarni o‘chirish"/>
-          <button name="action_finish_in_progress_orders" type="object" string="Jarayondagilarni yakunlash"/>
-          <field name="is_active" widget="statusbar"/>
-        </header>
-        <sheet>
-          <group>
-            <group>
-              <field name="name"/>
-              <field name="code"/>
-              <field name="manager_name"/>
-              <field name="capacity_per_day"/>
-            </group>
-            <group>
-              <field name="country_id"/>
-              <field name="state_id"/>
-              <field name="district_id"/>
-              <field name="address"/>
-              <field name="phone"/>
-              <field name="email"/>
-            </group>
-          </group>
-
-          <notebook>
-            <page string="Buyurtmalar">
-              <field name="order_ids">
-                <list editable="bottom">
-                  <field name="name"/>
-                  <field name="customer_id"/>
-                  <field name="technician_id"/>
-                  <field name="order_date"/>
-                  <field name="state"/>
-                  <field name="total_amount"/>
-                  <field name="balance"/>
-                </list>
-              </field>
-            </page>
-
-            <page string="To‘lovlar">
-              <field name="payment_ids">
-                <list>
-                  <field name="name"/>
-                  <field name="payment_date"/>
-                  <field name="amount"/>
-                  <field name="state"/>
-                  <field name="method"/>
-                </list>
-              </field>
-            </page>
-
-            <page string="Ustalar">
-              <field name="technician_ids">
-                <list>
-                  <field name="name"/>
-                  <field name="code"/>
-                  <field name="capacity_per_day"/>
-                  <field name="active_order_count"/>
-                  <field name="utilization_rate"/>
-                </list>
-              </field>
-            </page>
-
-            <page string="Baholar">
-              <field name="rating_ids">
-                <list>
-                  <field name="order_id"/>
-                  <field name="score"/>
-                  <field name="rating_date"/>
-                  <field name="comment"/>
-                </list>
-              </field>
-            </page>
-
-            <page string="Faol">
-              <field name="active_order_ids" context="{'default_center_id': active_id}">
-                <list>
-                  <field name="name"/><field name="customer_id"/><field name="state"/><field name="order_date"/>
-                </list>
-              </field>
-            </page>
-
-            <page string="Yakunlangan">
-              <field name="done_order_ids">
-                <list>
-                  <field name="name"/><field name="customer_id"/><field name="order_date"/>
-                </list>
-              </field>
-            </page>
-
-            <page string="Bugungi">
-              <field name="today_order_ids">
-                <tree>
-                  <field name="name"/><field name="customer_id"/><field name="state"/>
-                </tree>
-              </field>
-            </page>
-
-            <page string="Ko‘rsatkichlar">
-              <group>
+    <!-- List View -->
+    <record id="view_service_center_list" model="ir.ui.view">
+        <field name="name">service.center.list</field>
+        <field name="model">service.center</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="is_active"/>
+                <field name="country_id"/>
+                <field name="state_id"/>
+                <field name="district_id"/>
+                <field name="technician_count"/>
+                <field name="order_count"/>
                 <field name="active_order_count"/>
                 <field name="done_order_count"/>
                 <field name="today_order_count"/>
                 <field name="total_revenue"/>
                 <field name="avg_rating"/>
-                <field name="utilization_rate"/>
                 <field name="last_order_date"/>
-              </group>
-            </page>
-          </notebook>
-        </sheet>
-      </form>
-    </field>
-  </record>
+            </list>
+        </field>
+    </record>
 
-  <record id="action_service_center" model="ir.actions.act_window">
-    <field name="name">Servis markazlari</field>
-    <field name="res_model">service.center</field>
-    <field name="view_mode">tree,form</field>
-  </record>
+    <!-- Form View -->
+    <record id="view_service_center_form" model="ir.ui.view">
+        <field name="name">service.center.form</field>
+        <field name="model">service.center</field>
+        <field name="arch" type="xml">
+            <form string="Service Center">
+                <header>
+                    <button name="action_activate" type="object" string="Activate" invisible="not is_active"/>
+                    <button name="action_deactivate" type="object" string="Deactivate" invisible="is_active"/>>
+                    <button name="action_cleanup_zero_payments" string="Clean zero payments" type="object"/>
+                    <button name="action_finish_all_in_progress" string="Finish all" type="object"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="is_active"/>
+                    </group>
+                    <group>
+                        <field name="country_id"/>
+                        <field name="state_id"/>
+                        <field name="district_id"/>
+                        <field name="address"/>
+                        <field name="phone"/>
+                        <field name="email"/>
+                        <field name="latitude"/>
+                        <field name="longitude"/>
+                    </group>
+                    <notebook>
+                        <page string="Technicians">
+                            <field name="technician_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="phone"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Orders">
+                            <field name="order_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                    <field name="total_amount"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Payments">
+                            <field name="payment_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="amount"/>
+                                    <field name="payment_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Ratings">
+                            <field name="service_order_rating_ids">
+                                <list>
+                                    <field name="order_id"/>
+                                    <field name="score"/>
+                                    <field name="comment"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_service_center" model="ir.actions.act_window">
+        <field name="name">Service Centers</field>
+        <field name="res_model">service.center</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_service_center" name="Service Centers" action="action_service_center" parent="menu_service_center_root"/>
 </odoo>
