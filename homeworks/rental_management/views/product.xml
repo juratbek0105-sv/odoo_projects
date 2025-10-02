@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Product List View -->
+        <record id="view_product_list" model="ir.ui.view">
+            <field name="name">rental.product.list</field>
+            <field name="model">rental.product</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="availability"/>
+                    <field name="broken"/>
+                    <field name="future_availability_date"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Product Form View -->
+        <record id="view_product_form" model="ir.ui.view">
+            <field name="name">rental.product.form</field>
+            <field name="model">rental.product</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="availability"/>
+                            <field name="broken"/>
+                            <field name="future_availability_date"/>
+                            <field name="category_id"/>
+                        </group>
+                        <notebook>
+                            <page string="Rental Orders">
+                                <field name="rental_order_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="customer_id"/>
+                                        <field name="start_date"/>
+                                        <field name="end_date"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Rental Prices">
+                                <field name="rental_price_ids">
+                                    <list>
+                                        <field name="interval_number"/>
+                                        <field name="interval_type"/>
+                                        <field name="price"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_product" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="res_model">rental.product</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="menu_product" parent="menu_root_rental" action="action_product" name="Products"/>
+
+    </data>
+</odoo>

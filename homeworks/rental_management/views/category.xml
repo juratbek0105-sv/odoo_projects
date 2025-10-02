@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Category List View -->
+        <record id="view_category_list" model="ir.ui.view">
+            <field name="name">rental.category.list</field>
+            <field name="model">rental.category</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="product_ids"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Category Form View -->
+        <record id="view_category_form" model="ir.ui.view">
+            <field name="name">rental.category.form</field>
+            <field name="model">rental.category</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <notebook>
+                            <page string="Products">
+                                <field name="product_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="availability"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_category" model="ir.actions.act_window">
+            <field name="name">Categories</field>
+            <field name="res_model">rental.category</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Menus -->
+        <menuitem id="menu_root_rental" name="Rental Management"/>
+        <menuitem id="menu_category" parent="menu_root_rental" action="action_category" name="Categories"/>
+
+    </data>
+</odoo>

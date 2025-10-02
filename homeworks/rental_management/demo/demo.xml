@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Demo Categories -->
+    <record id="demo_category_cars" model="rental.category">
+        <field name="name">Cars</field>
+    </record>
+
+    <record id="demo_category_tools" model="rental.category">
+        <field name="name">Tools</field>
+    </record>
+
+    <!-- Demo Products -->
+    <record id="demo_product_bmw" model="rental.product">
+        <field name="name">BMW X5</field>
+        <field name="availability">available</field>
+        <field name="category_id" ref="demo_category_cars"/>
+    </record>
+
+    <record id="demo_product_toyota" model="rental.product">
+        <field name="name">Toyota Corolla</field>
+        <field name="availability">available</field>
+        <field name="category_id" ref="demo_category_cars"/>
+    </record>
+
+    <record id="demo_product_drill" model="rental.product">
+        <field name="name">Electric Drill</field>
+        <field name="availability">available</field>
+        <field name="category_id" ref="demo_category_tools"/>
+    </record>
+
+    <!-- Demo Prices -->
+    <record id="demo_price_bmw_day" model="rental.price">
+        <field name="product_id" ref="demo_product_bmw"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">day</field>
+        <field name="price">100</field>
+    </record>
+
+    <record id="demo_price_toyota_week" model="rental.price">
+        <field name="product_id" ref="demo_product_toyota"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">week</field>
+        <field name="price">500</field>
+    </record>
+
+    <record id="demo_price_drill_hour" model="rental.price">
+        <field name="product_id" ref="demo_product_drill"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hour</field>
+        <field name="price">10</field>
+    </record>
+
+    <!-- Demo Customers -->
+    <record id="demo_customer_john" model="rental.customer">
+        <field name="name">John Doe</field>
+        <field name="phone">+123456789</field>
+        <field name="email">john@example.com</field>
+    </record>
+
+    <record id="demo_customer_alice" model="rental.customer">
+        <field name="name">Alice Smith</field>
+        <field name="phone">+987654321</field>
+        <field name="email">alice@example.com</field>
+    </record>
+
+    <!-- Demo Orders -->
+    <record id="demo_order_bmw" model="rental.order">
+        <field name="customer_id" ref="demo_customer_john"/>
+        <field name="product_id" ref="demo_product_bmw"/>
+        <field name="start_date">2025-10-10 09:00:00</field>
+        <field name="returned_date">2025-10-12 09:00:00</field>
+        <field name="status">draft</field>
+    </record>
+
+    <record id="demo_order_drill" model="rental.order">
+        <field name="customer_id" ref="demo_customer_alice"/>
+        <field name="product_id" ref="demo_product_drill"/>
+        <field name="start_date">2025-10-15 14:00:00</field>
+        <field name="returned_date">2025-10-15 18:00:00</field>
+        <field name="status">confirmed</field>
+    </record>
+
+</odoo>
+
