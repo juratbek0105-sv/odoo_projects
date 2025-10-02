@@ -80,16 +80,18 @@ class RentalOrder(models.Model):
     @api.depends("start_date", "end_date", "product_id")
     def _compute_total_price(self):
         for record in self:
-            hours = (record.end_date - record.start_date).days * 24
-            total_price = self.env["rental.price"].get_result_price(product_id=record.product_id.id, hours=hours)
-            record.total_price = total_price
+            if record.end_date and record.start_date:
+                hours = (record.end_date - record.start_date).days * 24
+                total_price = self.env["rental.price"].get_result_price(product_id=record.product_id.id, hours=hours)
+                record.total_price = total_price
 
     @api.depends("returned_date", "start_date", "product_id")
     def _compute_complete_price(self):
         for record in self:
-            hours = (record.returned_date - record.start_date).days * 24
-            complete_price = self.env["rental.price"].get_result_price(product_id=record.product_id.id, hours=hours)
-            record.complete_price =  complete_price
+            if record.returned_date and record.start_date:
+                hours = (record.returned_date - record.start_date).days * 24
+                complete_price = self.env["rental.price"].get_result_price(product_id=record.product_id.id, hours=hours)
+                record.complete_price =  complete_price
 
     @api.constrains('start_date', 'end_date')
     def check_start_end_date(self):
