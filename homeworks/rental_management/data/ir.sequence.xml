@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_rental_order" model="ir.sequence">
+        <field name="name">Rental Order</field>
+        <field name="code">rental.order</field>
+        <field name="prefix">RO/</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>

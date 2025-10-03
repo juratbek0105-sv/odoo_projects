@@ -7,7 +7,7 @@
             <field name="name">rental.price.list</field>
             <field name="model">rental.price</field>
             <field name="arch" type="xml">
-                <list>
+                <list default_group_by="product_id">
                     <field name="product_id"/>
                     <field name="interval_number"/>
                     <field name="interval_type"/>

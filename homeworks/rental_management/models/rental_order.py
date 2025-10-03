@@ -5,7 +5,7 @@ class RentalOrder(models.Model):
     _name = "rental.order"
     _description = "Rental Order"
 
-    name = fields.Char(string="Order Reference", required=True, copy=False, default="New")
+    name = fields.Char(string="Order Reference", required=True, default="New")
     customer_id = fields.Many2one("rental.customer", string="Customer", required=True)
     product_id = fields.Many2one("rental.product", string="Product", required=True)
 
@@ -23,10 +23,35 @@ class RentalOrder(models.Model):
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
         ('returned', 'Returned'),
-        ('cancelled', 'Cancelled')], default="draft")
+        ('cancelled', 'Cancelled'),
+        ('overdue', 'Overdue'),
+    ], default="draft", compute="_compute_status", store=True, group_expand="_read_group_status")
+
+    @api.model
+    def _read_group_status(self, values, domain):
+        return ['draft', 'confirmed', 'returned', 'cancelled', 'overdue']
+
+    @api.depends("returned_date", "end_date")
+    def _compute_status(self):
+        now = fields.Datetime.now()
+        for rec in self:
+            if rec.status in ['cancelled']:
+                continue
+
+            if rec.returned_date:
+                rec.status = "returned"
+            elif rec.end_date and now > rec.end_date and rec.status == 'confirmed':
+                rec.status = "overdue"
+            elif rec.status not in ['confirmed']:
+                rec.status = "draft"
 
     def action_confirm(self):
         for record in self:
+            if record.product_id.availability != 'available':
+                raise ValidationError("Product is not available for rental")
+            if record.product_id.broken:
+                raise ValidationError("Product is broken and cannot be rented")
+
             record.status = 'confirmed'
             record.product_id.availability = 'rented'
             record.product_id.future_availability_date = record.end_date
@@ -43,7 +68,7 @@ class RentalOrder(models.Model):
     def _compute_duration(self):
         for record in self:
             if record.start_date and record.end_date:
-                record.duration = (record.end_date - record.start_date).total_seconds() / 3600
+                record.duration = (record.end_date - record.start_date).total_seconds() // 3600
             else:
                 record.duration = 0
 
@@ -81,7 +106,7 @@ class RentalOrder(models.Model):
     def _compute_total_price(self):
         for record in self:
             if record.end_date and record.start_date:
-                hours = (record.end_date - record.start_date).days * 24
+                hours = int((record.end_date - record.start_date).total_seconds() // 3600)
                 total_price = self.env["rental.price"].get_result_price(product_id=record.product_id.id, hours=hours)
                 record.total_price = total_price
 
@@ -100,13 +125,6 @@ class RentalOrder(models.Model):
                 if record.start_date >= record.end_date:
                     raise ValidationError("End date can not be before start date")
 
-    @api.constrains('product_id', 'status')
-    def _check_product_availability(self):
-        for order in self:
-            if order.status == 'confirmed':
-                if order.product_id.availability != 'available' or order.product_id.broken:
-                    raise ValidationError("Product is not available for rental")
-
     @api.constrains('product_id', 'start_date', 'end_date')
     def _check_overlap(self):
         for order in self:
@@ -119,3 +137,10 @@ class RentalOrder(models.Model):
             ])
             if overlapping:
                 raise ValidationError("This product is already rented in the selected period")
+
+    @api.model
+    def create(self, vals):
+        if vals.get('name', 'New') == 'New':
+            vals['name'] = self.env['ir.sequence'].next_by_code('rental.order') or 'New'
+        return super().create(vals)
+

@@ -9,7 +9,9 @@
             <field name="arch" type="xml">
                 <list>
                     <field name="name"/>
+                    <field name="description"/>
                     <field name="product_ids"/>
+                    <field name="active"/>
                 </list>
             </field>
         </record>
@@ -27,9 +29,10 @@
                         <notebook>
                             <page string="Products">
                                 <field name="product_ids">
-                                    <list>
+                                    <list editable="bottom">
                                         <field name="name"/>
                                         <field name="availability"/>
+                                        <field name="active"/>
                                     </list>
                                 </field>
                             </page>

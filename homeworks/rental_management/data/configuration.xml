@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- ===========================
+             Actions
+        ============================ -->
+
+        <!-- Categories Action -->
+        <record id="action_category" model="ir.actions.act_window">
+            <field name="name">Categories</field>
+            <field name="res_model">rental.category</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <!-- Rental Prices Action -->
+        <record id="action_rental_price" model="ir.actions.act_window">
+            <field name="name">Rental Prices</field>
+            <field name="res_model">rental.price</field>
+            <field name="view_mode">list,form</field>
+            <field name="context">{'group_by': 'product_id'}</field>
+        </record>
+
+        <!-- ===========================
+             Menus
+        ============================ -->
+
+        <!-- Root Configuration Menu -->
+        <menuitem id="menu_rental_config" name="Configuration" parent="menu_root_rental"/>
+
+        <!-- Categories Menu -->
+        <menuitem id="menu_rental_categories"
+                  name="Categories"
+                  parent="menu_rental_config"
+                  action="action_category"/>
+
+        <!-- Rental Prices Menu -->
+        <menuitem id="menu_rental_prices"
+                  name="Rental Prices"
+                  parent="menu_rental_config"
+                  action="action_rental_price"/>
+
+        <!-- ===========================
+             Views
+        ============================ -->
+
+        <!-- Categories Form View: General Info + Products tab -->
+        <record id="view_category_form" model="ir.ui.view">
+            <field name="name">rental.category.form</field>
+            <field name="model">rental.category</field>
+            <field name="arch" type="xml">
+                <form string="Category">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <notebook>
+                            <page string="Products">
+                                <field name="product_ids">
+                                    <list>
+                                        <field name="name"/>
+                                        <field name="availability"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Rental Prices List View -->
+        <record id="view_rental_price_list" model="ir.ui.view">
+            <field name="name">rental.price.list</field>
+            <field name="model">rental.price</field>
+            <field name="arch" type="xml">
+                <list string="Rental Prices List" editable="bottom">
+                    <field name="product_id"/>
+                    <field name="interval_number"/>
+                    <field name="interval_type"/>
+                    <field name="price"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Rental Prices Form View -->
+        <record id="view_rental_price_form" model="ir.ui.view">
+            <field name="name">rental.price.form</field>
+            <field name="model">rental.price</field>
+            <field name="arch" type="xml">
+                <form string="Rental Price">
+                    <sheet>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="interval_number"/>
+                            <field name="interval_type"/>
+                            <field name="price"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

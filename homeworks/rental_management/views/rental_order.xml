@@ -35,24 +35,128 @@
                         <field name="status" widget="statusbar" statusbar_visible="draft,confirmed,returned"/>
                     </header>
                     <sheet>
+                        <div class="oe_title">
+                            <label for="name" string="Name"/>
+                            <h1>
+                                <div class="d-flex">
+                                    <field class="text-break" name="name" options="{'line_breaks': False}" widget="text"
+                                           placeholder="e.g. S0003" readonly="1"/>
+                                </div>
+                            </h1>
+                        </div>
                         <group>
-                            <field name="name"/>
-                            <field name="customer_id"/>
                             <field name="product_id"/>
-                        </group>
-                        <group>
+                            <field name="customer_id"/>
                             <field name="start_date"/>
                             <field name="end_date"/>
-                            <field name="returned_date"/>
-                        </group>
-                        <group>
-                            <field name="duration" readonly="1"/>
-                            <field name="human_readable_duration" readonly="1"/>
-                            <field name="total_price" readonly="1"/>
-                            <field name="complete_price" readonly="1"/>
                         </group>
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+        <record id="view_order_kanban" model="ir.ui.view">
+            <field name="name">rental.order.kanban</field>
+            <field name="model">rental.order</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="status"
+                        decoration-success="status == 'confirmed'"
+                        decoration-danger="status == 'cancelled'"
+                        decoration-warning="status == 'draft'"
+                        decoration-info="status == 'returned'"
+                        decoration-secondary="status == 'overdue'">
+                    <field name="name"/>
+                    <field name="customer_id"/>
+                    <field name="product_id"/>
+                    <field name="status"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                    <field name="returned_date"/>
+                    <field name="complete_price"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="o_kanban_record">
+
+                                <!-- Order Header -->
+                                <div class="o_kanban_header d-flex justify-between align-center">
+                                    <strong>
+                                        <field name="name"/>
+                                    </strong>
+                                    <div>
+                                        <span class="badge badge-pill o_badge_primary"
+                                              t-if="record.status.raw_value == 'confirmed'">Confirmed
+                                        </span>
+                                        <span class="badge badge-pill o_badge_warning"
+                                              t-if="record.status.raw_value == 'draft'">Draft
+                                        </span>
+                                        <span class="badge badge-pill o_badge_info"
+                                              t-if="record.status.raw_value == 'returned'">Returned
+                                        </span>
+                                        <span class="badge badge-pill o_badge_danger"
+                                              t-if="record.status.raw_value == 'cancelled'">Cancelled
+                                        </span>
+                                        <span class="badge badge-pill o_badge_secondary"
+                                              t-if="record.status.raw_value == 'overdue'">Overdue
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Body -->
+                                <div class="o_kanban_details mt8">
+                                    <div>
+                                        <span class="fa fa-user" title="Customer"/>
+                                        <strong>Customer:</strong>
+                                        <field name="customer_id"/>
+                                    </div>
+                                    <div>
+                                        <span class="fa fa-cube" title="Product"/>
+                                        <strong>Product:</strong>
+                                        <field name="product_id"/>
+                                    </div>
+                                    <div>
+                                        <span class="fa fa-calendar" title="Rental Period"/>
+                                        <strong>From:</strong>
+                                        <field name="start_date"/>
+                                        → <strong>To:</strong>
+                                        <field name="end_date"/>
+                                    </div>
+                                    <div t-if="record.returned_date.value">
+                                        <span class="fa fa-check-circle text-success" title="Returned"/>
+                                        <strong>Returned:</strong>
+                                        <field name="returned_date"/>
+                                    </div>
+                                    <div class="mt4">
+                                        <span class="fa fa-money" title="Total Price"/>
+                                        <strong>Total:</strong>
+                                        <field name="complete_price"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+
+                </kanban>
+
+            </field>
+        </record>
+
+        <record id="order_search_view" model="ir.ui.view">
+            <field name="name">rental.order.search</field>
+            <field name="model">rental.order</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter name="draft_orders" string="Draft Orders" domain="[('status','=','draft')]"/>
+                    <filter name="confirmed_orders" string="Confirmed Orders" domain="[('status','=','confirmed')]"/>
+                    <filter name="returned_orders" string="Returned Orders" domain="[('status','=','returned')]"/>
+                    <filter name="cancelled_orders" string="Cancelled Orders" domain="[('status','=','cancelled')]"/>
+
+                    <group>
+                        <filter name="group_by_customer_id" string="Customer" context="{'group_by': 'customer_id'}"/>
+                        <filter name="group_by_status" string="Status" context="{'group_by': 'status'}"/>
+                        <filter name="group_by_product_id" string="Product" context="{'group_by': 'product_id'}"/>
+                    </group>
+                </search>
             </field>
         </record>
 
@@ -60,7 +164,7 @@
         <record id="action_order" model="ir.actions.act_window">
             <field name="name">Orders</field>
             <field name="res_model">rental.order</field>
-            <field name="view_mode">list,form</field>
+            <field name="view_mode">kanban,list,form</field>
         </record>
 
         <!-- Menu -->

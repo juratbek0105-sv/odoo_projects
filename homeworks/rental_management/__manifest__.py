@@ -8,6 +8,9 @@
     'data': [
         'security/ir.model.access.csv',
 
+        'data/ir.sequence.xml',
+        'data/configuration.xml',
+
         'views/category.xml',
         'views/customer.xml',
         'views/product.xml',
