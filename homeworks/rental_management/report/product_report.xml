@@ -30,7 +30,7 @@
                                         <t t-esc="'Yes' if doc.broken else 'No'"/>
                                     </td>
                                     <td style="width:40%; text-align:right; vertical-align:top;">
-                                        <strong>Average Rental Hours:</strong>
+                                        <strong>Average Rental Hours</strong>
                                         <t t-esc="doc.avg_rental_hours or 0"/>
                                         hours
                                     </td>

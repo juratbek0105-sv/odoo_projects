@@ -1,53 +1,70 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <odoo>
     <data>
+
+
         <template id="report_order">
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="doc">
                     <div class="page">
-                        <div style="text-align:center; margin-bottom:15px;">
-                            <h2 style="font-weight:700; color:#333;">Rental Order Report</h2>
-                            <span style="font-size:13px; color:#777;">Reference:
+
+                        <!-- Header -->
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <h2 style="font-weight:700; color:#2c3e50; margin:0;">Rental Order Report</h2>
+                            <span style="font-size:13px; color:#7f8c8d;">Reference:
                                 <t t-esc="doc.name"/>
                             </span>
-                        </div> <!-- STATUS & PERIOD -->
-                        <div style="margin-bottom:20px;">
-                            <table style="width:100%; border-collapse:collapse;">
-                                <tr>
-                                    <td style="width:50%; vertical-align:top;">
-                                        <strong>Status:</strong>
-                                        <span style="text-transform:capitalize;">
-                                            <t t-esc="doc.status"/>
-                                        </span>
-                                        <br/>
-                                        <strong>Duration:</strong>
-                                        <t t-esc="doc.human_readable_duration"/>
-                                        <br/>
-                                        <strong>Start Date:</strong>
-                                        <t t-esc="doc.start_date"/>
-                                        <br/>
-                                        <strong>End Date:</strong>
-                                        <t t-esc="doc.end_date"/>
-                                        <br/>
-                                    </td>
-                                    <td style="width:50%; text-align:right; vertical-align:top;">
-                                        <strong>Total Price:</strong>
-                                        <t t-esc="doc.total_price"/>
-                                        <br/>
-                                        <strong>Paid Amount:</strong>
-                                        <t t-esc="doc.complete_price"/>
-                                        <br/>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div> <!-- CUSTOMER INFO -->
-                        <div style="margin-top:10px;">
-                            <h4 style="background-color:#f2f2f2; padding:6px 10px; border-radius:4px;">Customer
-                                Information
+                        </div>
+
+                        <!-- Order Summary -->
+                        <div style="margin-bottom:25px;">
+                            <h4 style="background:#f8f9fa; padding:8px 10px; border-left:4px solid #3498db;">
+                                Order Details
                             </h4>
-                            <table class="table table-sm"
-                                   style="width:100%; border:1px solid #ddd; border-collapse:collapse; font-size:13px;">
-                                <thead style="background-color:#fafafa;">
+                            <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                                <thead style="background-color:#f1f1f1;">
+                                    <tr>
+                                        <th style="border:1px solid #ddd; padding:6px;">Status</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">Duration</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">Start Date</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">End Date</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">Total Price</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">Paid Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:6px; text-transform:capitalize;">
+                                            <t t-esc="doc.status"/>
+                                        </td>
+                                        <td style="border:1px solid #ddd; padding:6px;">
+                                            <t t-esc="doc.human_readable_duration"/>
+                                        </td>
+                                        <td style="border:1px solid #ddd; padding:6px;">
+                                            <t t-esc="doc.start_date"/>
+                                        </td>
+                                        <td style="border:1px solid #ddd; padding:6px;">
+                                            <t t-esc="doc.end_date"/>
+                                        </td>
+                                        <td style="border:1px solid #ddd; padding:6px; text-align:right;">
+                                            <t t-esc="doc.total_price"/>
+                                        </td>
+                                        <td style="border:1px solid #ddd; padding:6px; text-align:right;">
+                                            <t t-esc="doc.complete_price"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Customer Information -->
+                        <div style="margin-bottom:25px;">
+                            <h4 style="background:#f8f9fa; padding:8px 10px; border-left:4px solid #27ae60;">
+                                Customer Information
+                            </h4>
+                            <table style="width:100%; border:1px solid #ddd; border-collapse:collapse; font-size:13px;">
+                                <thead style="background-color:#f1f1f1;">
                                     <tr>
                                         <th style="border:1px solid #ddd; padding:6px;">Name</th>
                                         <th style="border:1px solid #ddd; padding:6px;">Phone</th>
@@ -68,13 +85,15 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div> <!-- PRODUCT INFO -->
-                        <div style="margin-top:20px;">
-                            <h4 style="background-color:#f2f2f2; padding:6px 10px; border-radius:4px;">Product Details
+                        </div>
+
+                        <!-- Product Details -->
+                        <div style="margin-bottom:25px;">
+                            <h4 style="background:#f8f9fa; padding:8px 10px; border-left:4px solid #e67e22;">
+                                Product Details
                             </h4>
-                            <table class="table table-sm"
-                                   style="width:100%; border:1px solid #ddd; border-collapse:collapse; font-size:13px;">
-                                <thead style="background-color:#fafafa;">
+                            <table style="width:100%; border:1px solid #ddd; border-collapse:collapse; font-size:13px;">
+                                <thead style="background-color:#f1f1f1;">
                                     <tr>
                                         <th style="border:1px solid #ddd; padding:6px;">Product</th>
                                         <th style="border:1px solid #ddd; padding:6px;">Category</th>
@@ -90,30 +109,44 @@
                                         <td style="border:1px solid #ddd; padding:6px;">
                                             <t t-esc="doc.product_id.category_id.name"/>
                                         </td>
-                                        <td style="border:1px solid #ddd; padding:6px;">
+                                        <td style="border:1px solid #ddd; padding:6px; text-align:right;">
                                             <t t-esc="doc.total_price"/>
                                         </td>
-                                        <td style="border:1px solid #ddd; padding:6px;">
+                                        <td style="border:1px solid #ddd; padding:6px; text-align:right;">
                                             <t t-esc="doc.complete_price"/>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+
+                        <!-- Footer -->
+                        <div style="margin-top:40px; font-size:11px; color:#888; text-align:center;">
+                            <span>Generated by Odoo Rental Management System</span>
+                            <br/>
+                            <span>
+                                <t t-esc="time.strftime('%Y-%m-%d %H:%M')"/>
+                            </span>
+                        </div>
+
                     </div>
                 </t>
             </t>
         </template>
 
+        <!-- Report Action -->
         <record id="action_order_report" model="ir.actions.report">
             <field name="name">Order Report</field>
             <field name="model">rental.order</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">rental_management.report_order</field>
             <field name="report_file">rental_management.report_order</field>
-            <field name="print_report_name">'Order - %s' % object.name</field>
+            <field name="print_report_name">'Order - %s' % (object.name or '')</field>
             <field name="binding_model_id" ref="model_rental_order"/>
             <field name="binding_type">report</field>
         </record>
+
     </data>
+
+
 </odoo>
