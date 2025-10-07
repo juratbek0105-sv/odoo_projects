@@ -9,8 +9,8 @@ class RentalOrder(models.Model):
     customer_id = fields.Many2one("rental.customer", string="Customer", required=True)
     product_id = fields.Many2one("rental.product", string="Product", required=True)
 
-    start_date = fields.Datetime(default=fields.Datetime.now)
-    end_date = fields.Datetime()
+    start_date = fields.Datetime(default=fields.Datetime.now, required=True)
+    end_date = fields.Datetime(required=True)
     returned_date = fields.Datetime(readonly=True)
 
     duration = fields.Integer(compute="_compute_duration", store=True)
@@ -24,44 +24,52 @@ class RentalOrder(models.Model):
         ('confirmed', 'Confirmed'),
         ('returned', 'Returned'),
         ('cancelled', 'Cancelled'),
-        ('overdue', 'Overdue'),
-    ], default="draft", compute="_compute_status", store=True, group_expand="_read_group_status")
+    ], default="draft", compute="_compute_status",store=True, group_expand="_read_group_status")
 
     @api.model
     def _read_group_status(self, values, domain):
-        return ['draft', 'confirmed', 'returned', 'cancelled', 'overdue']
+        return ['draft', 'confirmed', 'returned', 'cancelled']
 
-    @api.depends("returned_date", "end_date")
+    @api.depends("returned_date", "start_date", "end_date")
     def _compute_status(self):
-        now = fields.Datetime.now()
-        for rec in self:
-            if rec.status in ['cancelled']:
-                continue
-
-            if rec.returned_date:
-                rec.status = "returned"
-            elif rec.end_date and now > rec.end_date and rec.status == 'confirmed':
-                rec.status = "overdue"
-            elif rec.status not in ['confirmed']:
-                rec.status = "draft"
+        for record in self:
+            if record.returned_date:
+                record.status = "returned"
+            elif record.start_date and record.end_date:
+                record.status = "confirmed"
+            else:
+                record.status = "draft"
 
     def action_confirm(self):
         for record in self:
-            if record.product_id.availability != 'available':
-                raise ValidationError("Product is not available for rental")
-            if record.product_id.broken:
-                raise ValidationError("Product is broken and cannot be rented")
+            if record.status == "draft":
+                if record.product_id.availability != 'available':
+                    raise ValidationError("Product is not available for rental")
 
-            record.status = 'confirmed'
-            record.product_id.availability = 'rented'
-            record.product_id.future_availability_date = record.end_date
+                record.status = 'confirmed'
+                record.product_id.availability = 'rented'
+                record.product_id.future_availability_date = record.end_date
 
     def action_return(self):
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Return Rental",
+            "res_model": "rental.check.broken.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {
+                "default_rental_order_id": self.id,
+                "default_product_id": self.product_id.id,
+                "default_is_broken": self.product_id.broken,
+                }
+            }
+
+    def action_cancel(self):
         for record in self:
-            record.status = 'returned'
-            record.product_id.availability = 'available'
-            record.product_id.future_availability_date = False
-            record.returned_date = fields.Datetime.now()
+            if record.status in ["draft", "confirmed"]:
+                record.status = "cancelled"
+                record.product_id.availability = 'available'
+                record.product_id.future_availability_date = False
 
 
     @api.depends("start_date", "end_date")
@@ -138,9 +146,11 @@ class RentalOrder(models.Model):
             if overlapping:
                 raise ValidationError("This product is already rented in the selected period")
 
-    @api.model
-    def create(self, vals):
-        if vals.get('name', 'New') == 'New':
-            vals['name'] = self.env['ir.sequence'].next_by_code('rental.order') or 'New'
-        return super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get('name', 'New') == 'New':
+                vals['name'] = self.env['ir.sequence'].next_by_code('rental.order') or 'New'
+        return super(RentalOrder, self).create(vals_list)
+
 

@@ -17,8 +17,8 @@ class Customer(models.Model):
 
     _sql_constraints = [
         ('email_unique', 'unique(email)', 'Email must be unique!'),
-        ("unique_customer_name", "unique(name)", "Customer name must be unique!"),
     ]
+
     @api.depends('rental_orders')
     def _compute_order_count(self):
         for rec in self:

@@ -4,3 +4,4 @@ access_rental_customer,access_rental_customer,model_rental_customer,base.group_u
 access_rental_product,access_rental_product,model_rental_product,base.group_user,1,1,1,1
 access_rental_order,access_rental_order,model_rental_order,base.group_user,1,1,1,1
 access_rental_price,access_rental_price,model_rental_price,base.group_user,1,1,1,1
+access_rental_wizard,access_rental_wizard,model_rental_check_broken_wizard,base.group_user,1,1,1,1

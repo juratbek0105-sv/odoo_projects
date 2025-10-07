@@ -51,21 +51,43 @@
             <field name="name">rental.customer.kanban</field>
             <field name="model">rental.customer</field>
             <field name="arch" type="xml">
-                <kanban>
+                <kanban class="o_kanban_view">
                     <field name="name"/>
                     <field name="phone"/>
                     <field name="email"/>
                     <field name="active"/>
 
                     <templates>
-                <t t-name="card">
-                    <field name="name"/>
-                    <field name="phone"/>
-                    <field name="email"/>
-                    <field name="active"/>
-                </t>
-            </templates>
+                        <t t-name="card">
+                            <div class="o_kanban_record card shadow-sm rounded p-3 mb-2"
+                                 style="border-left: 5px solid #4e73df;">
+                                <!-- Name -->
+                                <div class="o_kanban_primary mb-2">
+                                    <span class="fw-bold fs-5 text-primary">
+                                        <field name="name"/>
+                                    </span>
+                                </div>
+
+                                <!-- Contact info -->
+                                <div class="o_kanban_secondary text-muted small">
+                                    <div class="mb-1">
+                                        <i class="fa fa-phone me-1 text-success"/>
+                                        <field name="phone"/>
+                                    </div>
+                                    <div class="mb-1">
+                                        <i class="fa fa-envelope me-1 text-danger"/>
+                                        <field name="email"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-toggle-on me-1 text-info"/>
+                                        <field name="active"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
                 </kanban>
+
             </field>
         </record>
 

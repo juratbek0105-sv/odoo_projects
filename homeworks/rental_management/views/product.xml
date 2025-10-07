@@ -10,7 +10,9 @@
                     <field name="availability"/>
                     <field name="broken"/>
                     <field name="future_availability_date"/>
+                     <field name="avg_rental_hours"/>
                     <field name="active"/>
+
                 </list>
             </field>
         </record>
@@ -21,8 +23,15 @@
             <field name="model">rental.product</field>
             <field name="arch" type="xml">
                 <form>
+                    <header>
+                        <button name="action_toggle_broken"
+                                type="object"
+                                string="Mark as Broken/Fixed"
+                                class="btn-primary"/>
+                    </header>
                     <sheet>
-                        <field name="image_1920" widget="image" class="oe_avatar" options="{'convert_to_webp': True, 'preview_image': 'image_128'}"/>
+                        <field name="image_1920" widget="image" class="oe_avatar"
+                               options="{'convert_to_webp': True, 'preview_image': 'image_128'}"/>
                         <div class="oe_title">
                             <label for="name" string="Product"/>
                             <h1>
@@ -36,9 +45,12 @@
                             <group>
                                 <field name="availability"/>
                                 <field name="category_id"/>
+                                <field name="active"/>
+
                             </group>
                             <group>
-                                <field name="active"/>
+                                <field name="broken"/>
+                                <field name="future_availability_date"/>
                             </group>
                         </group>
                     </sheet>
@@ -50,7 +62,7 @@
             <field name="name">rental.product.kanban</field>
             <field name="model">rental.product</field>
             <field name="arch" type="xml">
-                <kanban>
+                <kanban class="o_kanban_view">
                     <field name="name"/>
                     <field name="availability"/>
                     <field name="broken"/>
@@ -58,13 +70,41 @@
 
                     <templates>
                         <t t-name="card">
-                            <field name="name"/>
-                            <field name="availability"/>
-                            <field name="broken"/>
-                            <field name="future_availability_date"/>
+                            <div class="o_kanban_record card shadow-sm rounded p-3 mb-2"
+                                 t-attf-style="border-left:5px solid #{record.broken.value and 'red' or 'green'}">
+
+                                <!-- Product name -->
+                                <div class="o_kanban_primary mb-2">
+                                    <span class="fw-bold fs-5 text-primary">
+                                        <field name="name"/>
+                                    </span>
+                                </div>
+
+                                <!-- Status section -->
+                                <div class="o_kanban_secondary small">
+                                    <div class="mb-1">
+                                        <i class="fa fa-check-circle text-success me-1"/>
+                                        <strong>Available:</strong>
+                                        <field name="availability"/>
+                                    </div>
+
+                                    <div class="mb-1">
+                                        <i class="fa fa-exclamation-triangle text-danger me-1"/>
+                                        <strong>Broken:</strong>
+                                        <field name="broken"/>
+                                    </div>
+
+                                    <div>
+                                        <i class="fa fa-calendar text-info me-1"/>
+                                        <strong>Future Available:</strong>
+                                        <field name="future_availability_date"/>
+                                    </div>
+                                </div>
+                            </div>
                         </t>
                     </templates>
                 </kanban>
+
             </field>
         </record>
 

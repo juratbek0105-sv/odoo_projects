@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="check_publish_wizard_form" model="ir.ui.view">
+            <field name="name">rental.check.broken.wizard.form</field>
+            <field name="model">rental.check.broken.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Check Broken Wizard">
+                    <group>
+                        <field name="rental_order_id" readonly="1"/>
+                        <field name="is_broken"/>
+
+                    </group>
+                    <footer>
+                        <button string="Confirm" type="object" name="action_confirm_return" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

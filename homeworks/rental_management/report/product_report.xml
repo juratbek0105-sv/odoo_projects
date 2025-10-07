@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <template id="report_product">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <h2 style="font-weight:700; color:#333;">Rental Product Report</h2>
+                            <span style="font-size:13px; color:#777;">Reference:
+                                <t t-esc="doc.name"/>
+
+                            </span>
+                        </div>
+
+                        <!-- PRODUCT INFO -->
+                        <div style="margin-bottom:20px;">
+                            <table style="width:100%; border-collapse:collapse;">
+                                <tr>
+                                    <td style="width:60%; vertical-align:top;">
+                                        <strong>Category:</strong>
+                                        <t t-esc="doc.category_id.name"/>
+                                        <br/>
+                                        <strong>Status:</strong>
+                                        <span t-att-style="'color:green;' if doc.availability == 'available' else 'color:orange;' if doc.availability == 'rented' else 'color:red;'">
+                                            <t t-esc="doc.availability"/>
+                                        </span>
+                                        <br/>
+                                        <strong>Broken:</strong>
+                                        <t t-esc="'Yes' if doc.broken else 'No'"/>
+                                    </td>
+                                    <td style="width:40%; text-align:right; vertical-align:top;">
+                                        <strong>Average Rental Hours:</strong>
+                                        <t t-esc="doc.avg_rental_hours or 0"/>
+                                        hours
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div>
+                            <h4 style="background-color:#f2f2f2; padding:6px 10px; border-radius:4px;">Rental Orders
+                                History
+                            </h4>
+                            <table class="table table-sm"
+                                   style="width:100%; border:1px solid #ddd; border-collapse:collapse; font-size:13px;">
+                                <thead style="background-color:#fafafa;">
+                                    <tr>
+                                        <th style="border:1px solid #ddd; padding:6px;">Customer</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">Start Date</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">End Date</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">Status</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">Complete Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.rental_order_ids" t-as="order">
+                                        <tr>
+                                            <td style="border:1px solid #ddd; padding:6px;">
+                                                <t t-esc="order.customer_id.name"/>
+                                            </td>
+                                            <td style="border:1px solid #ddd; padding:6px;">
+                                                <t t-esc="order.start_date"/>
+                                            </td>
+                                            <td style="border:1px solid #ddd; padding:6px;">
+                                                <t t-esc="order.end_date"/>
+                                            </td>
+                                            <td style="border:1px solid #ddd; padding:6px; text-transform:capitalize;">
+                                                <t t-esc="order.status"/>
+                                            </td>
+                                            <td style="border:1px solid #ddd; padding:6px;">
+                                                <t t-esc="order.complete_price"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+
+        </template>
+
+        <record id="action_product_report" model="ir.actions.report">
+            <field name="name">Product Report</field>
+            <field name="model">rental.product</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">rental_management.report_product</field>
+            <field name="report_file">rental_management.report_product</field>
+            <field name="print_report_name">'Product - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_rental_product"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>
