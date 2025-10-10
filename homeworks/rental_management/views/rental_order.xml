@@ -115,7 +115,8 @@
                                         <span class="fa fa-calendar" title="Rental Period"/>
                                         <strong>From:</strong>
                                         <field name="start_date"/>
-                                        → <strong>To:</strong>
+                                        →
+                                        <strong>To:</strong>
                                         <field name="end_date"/>
                                     </div>
                                     <div t-if="record.returned_date.value">
