@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fast_food_product,access_fast_food_product,model_fast_food_product,,1,1,1,1
+access_fast_food_category,access_fast_food_category,model_fast_food_category,,1,1,1,1
+access_fast_food_order,access_fast_food_order,model_fast_food_order,,1,1,1,1
+access_fast_food_order_line,access_fast_food_order_line,model_fast_food_order_line,,1,1,1,1
+access_fast_food_payment,access_fast_food_payment,model_fast_food_payment,,1,1,1,1
+access_fast_food_kitchen,access_fast_food_kitchen,model_fast_food_kitchen_display,,1,1,1,1
+access_fast_food_kitchen_line,access_fast_food_kitchen_line,model_fast_food_kitchen_display_line,,1,1,1,1

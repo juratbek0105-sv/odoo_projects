@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="report_payment">
+            <t t-call="web.html_container">
+                <div style="text-align:center; margin-bottom:25px;">
+                    <h1 style="font-weight:800; color:#2c3e50;">Fast Food Order Report</h1>
+                </div>
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page" style="font-family: 'Arial'; color:#333;">
+
+                        <!-- ORDER INFO CARD -->
+                        <div style="border:1px solid #ddd; border-radius:8px; padding:15px; margin-bottom:25px; background-color:#fafafa; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+                            <h3 style="border-bottom:2px solid #e67e22; padding-bottom:8px; color:#e67e22;">Payment
+                                summary
+                            </h3>
+                            <table style="width:100%; font-size:14px; margin-top:8px;">
+                                <tr>
+                                    <td style="width:50%; vertical-align:top;">
+                                        <strong>Reference:</strong>
+                                        <t t-esc="doc.order_id"/>
+                                        <br/>
+                                        <strong>Payment method:</strong>
+                                        <t t-esc="doc.payment_method.capitalize()"/>
+                                        <br/>
+                                        <strong>Amount:</strong>
+                                        <t t-esc="doc.amount"/>
+                                        <br/>
+                                        <strong>Status:</strong>
+                                        <span t-att-style="
+                                        'color:#27ae60;font-weight:bold;' if doc.status == 'paid'
+                                        else 'color:#f1c40f;font-weight:bold;' if doc.status == 'partial'
+                                        else 'color:#e74c3c;font-weight:bold;' if doc.status == 'cancelled'
+                                        else 'color:#7f8c8d;font-weight:bold;'">
+                                            <t t-esc="doc.status and doc.status.capitalize() or 'N/A'"/>
+                                        </span>
+                                        <br/>
+                                        <strong>Payment time:</strong>
+                                        <span t-att-style="'color:#27ae60;font-weight:bold;font-weight:bold;'">
+                                            <t t-esc="doc.payment_time or '-'"/>
+                                        </span>
+                                    </td>
+                                    <td style="text-align:right; vertical-align:top;">
+                                        <strong>Order Date:</strong>
+                                        <t t-esc="doc.order_id.order_time"/>
+                                        <br/>
+                                        <strong>Total:</strong>
+                                        <span style="color:#2ecc71; font-weight:bold;">
+                                            <t t-esc="doc.order_id.total_amount"/>
+                                            UZS
+                                        </span>
+                                        <br/>
+                                        <strong>Payment:</strong>
+                                        <t t-esc="'Paid' if doc.status == 'paid' else 'Pending'"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- ORDER LINE DETAILS -->
+                        <div style="margin-bottom:25px;">
+                            <h3 style="background-color:#f8f9fa; color:#2c3e50; padding:8px 10px; border-radius:4px; border-left:4px solid #3498db;">
+                                Ordered Items
+                            </h3>
+                            <table style="width:100%; border:1px solid #ddd; border-collapse:collapse; font-size:13px; margin-top:5px;">
+                                <thead style="background-color:#f3f6f9;">
+                                    <tr>
+                                        <th style="border:1px solid #ddd; padding:8px;">Product</th>
+                                        <th style="border:1px solid #ddd; padding:8px;">Quantity</th>
+                                        <th style="border:1px solid #ddd; padding:8px;">Unit Price (UZS)</th>
+                                        <th style="border:1px solid #ddd; padding:8px;">Subtotal (UZS)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.order_line_ids" t-as="line">
+                                        <tr>
+                                            <td style="border:1px solid #ddd; padding:8px;">
+                                                <t t-esc="line.product_id.name"/>
+                                            </td>
+                                            <td style="border:1px solid #ddd; padding:8px; text-align:center;">
+                                                <t t-esc="line.quantity"/>
+                                            </td>
+                                            <td style="border:1px solid #ddd; padding:8px; text-align:center;">
+                                                <t t-esc="line.price_unit"/>
+                                            </td>
+                                            <td style="border:1px solid #ddd; padding:8px; text-align:center;">
+                                                <t t-esc="line.subtotal"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- FOOTER MESSAGE -->
+                        <div style="margin-top:20px; text-align:center; font-size:13px; color:#7f8c8d;">
+                            <h4>Thank you for dining with us! Your feedback helps us serve better.</h4>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!-- REPORT ACTION -->
+        <record id="action_order_report" model="ir.actions.report">
+            <field name="name">Payment Report</field>
+            <field name="model">fast.food.payment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fast_food.report_payment</field>
+            <field name="report_file">fast_food.report_payment</field>
+            <field name="print_report_name">'Payment - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_fast_food_payment"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>
+

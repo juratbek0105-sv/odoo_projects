@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Root Menu -->
+        <menuitem id="menu_root_fast_food" name="Fast Food"/>
+
+        <!-- Submenus -->
+        <menuitem id="menu_product" name="Products" action="action_product" parent="menu_root_fast_food"/>
+        <menuitem id="menu_category" name="Categories" action="action_category" parent="menu_root_fast_food"/>
+
+        <!-- Orders Main Menu -->
+        <menuitem id="menu_orders_root" name="Orders" parent="menu_root_fast_food"/>
+
+        <!-- All Orders -->
+        <menuitem id="menu_order" name="Orders" action="action_order" parent="menu_orders_root"/>
+
+
+        <!-- Active Orders Menu -->
+        <menuitem id="menu_active_orders" name="Active Orders" parent="menu_orders_root" action="action_active_orders"/>
+
+        <!-- Order Lines (optional technical menu) -->
+        <menuitem id="menu_order_line" name="Order Lines" action="action_order_line" parent="menu_root_fast_food"/>
+
+        <!-- Payments -->
+        <menuitem id="menu_payment" name="Payments" action="action_payment" parent="menu_root_fast_food"/>
+
+        <menuitem id="menu_kitchen_display"
+                  name="Kitchen Display"
+                  parent="menu_root_fast_food"
+                  action="action_kitchen_display_new"/>
+    </data>
+</odoo>

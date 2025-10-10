@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Order List View -->
+        <record id="order_list" model="ir.ui.view">
+            <field name="name">fast.food.order.list</field>
+            <field name="model">fast.food.order</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="order_type"/>
+                    <field name="table_number"/>
+                    <field name="total_amount"/>
+                    <field name="status"/>
+                    <field name="order_time"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Order Form View -->
+        <record id="order_form" model="ir.ui.view">
+            <field name="name">fast.food.order.form</field>
+            <field name="model">fast.food.order</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="status" widget="statusbar" statusbar_visible="draft,confirmed,paid,cancelled"/>
+                        <button name="action_confirm" type="object" string="Confirm"
+                                modifiers="{'invisible': [('status', '!=', 'draft')]}"/>
+                        <button name="action_paid" type="object" string="Paid"
+                                modifiers="{'invisible': [('status', '!=', 'confirmed')]}"/>
+                        <button name="action_cancel" type="object" string="Cancel"/>
+
+
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="order_type"/>
+                            <field name="table_number"
+                                   modifiers="{'invisible': [('order_type', '=', 'takeaway')],
+                                           'required': [('order_type', '=', 'dine_in')]}"/>
+                            <field name="order_time" readonly="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Order Lines">
+                                <field name="order_line_ids">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit"/>
+                                        <field name="subtotal"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Payments">
+                                <field name="payment_ids">
+                                    <list editable="bottom">
+                                        <field name="payment_method"/>
+                                        <field name="amount"/>
+                                        <field name="payment_time"/>
+                                        <field name="status"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Order Kanban View -->
+        <record id="order_kanban" model="ir.ui.view">
+            <field name="name">fast.food.order.kanban</field>
+            <field name="model">fast.food.order</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="status">
+                    <field name="name"/>
+                    <field name="order_type"/>
+                    <field name="table_number"/>
+                    <field name="total_amount"/>
+                    <field name="order_time"/>
+                    <field name="status"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_global_click">
+                                <strong>
+                                    <t t-esc="record.name.value"/>
+                                </strong>
+                                <br/>
+                                <t t-if="record.order_type.value == 'dine_in'">
+                                    Table:
+                                    <t t-esc="record.table_number.value"/>
+                                    <br/>
+                                </t>
+                                Total:
+                                <t t-esc="record.total_amount.value"/>
+                                UZS
+                                <br/>
+                                <span t-esc="record.status.value"
+                                      t-attf-class="badge #{record.status.value == 'paid' ? 'text-success' : record.status.value == 'confirmed' ? 'text-warning' : 'text-secondary'}"/>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="order_search" model="ir.ui.view">
+            <field name="name">fast.food.order.search</field>
+            <field name="model">fast.food.order</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <filter name="draft" string="Draft" domain="[('status','=','draft')]"/>
+                    <filter name="confirmed" string="Confirmed" domain="[('status','=','confirmed')]"/>
+                    <filter name="done" string="Done" domain="[('status','=','done')]"/>
+                    <filter name="canceled" string="Canceled" domain="[('status','=','canceled')]"/>
+                    <separator/>
+                    <filter name="dine_in" string="Dine In" domain="[('order_type','=','dine_in')]"/>
+                    <filter name="takeaway" string="Takeaway" domain="[('order_type','=','takeaway')]"/>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>

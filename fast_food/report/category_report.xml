@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- CATEGORY REPORT TEMPLATE -->
+        <template id="report_category">
+            <t t-call="web.html_container">
+                <div style="text-align:center; margin-bottom:15px;">
+                    <h1 style="font-weight:700; color:#333;">Category Report</h1>
+                </div>
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <!-- HEADER -->
+                        <div style="text-align:center; margin-bottom:15px; margin-top:15px;">
+                            <span style="font-size:20px; color:#777;">
+                                Reference:
+                                <t t-esc="doc.name"/>
+                            </span>
+                        </div>
+
+
+                        <!-- RELATED PRODUCTS -->
+                        <div>
+                            <h4 style="background-color:#f2f2f2;text-align:center; padding:6px 10px; border-radius:4px;">
+                                Products in this Category:
+                            </h4>
+                            <table class="table table-sm"
+                                   style="width:100%; border:1px solid #ddd; border-collapse:collapse; font-size:13px;">
+                                <thead style="background-color:#fafafa;">
+                                    <tr>
+                                        <th style="border:1px solid #ddd; padding:6px;">Product</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">Price</th>
+                                        <th style="border:1px solid #ddd; padding:6px;">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.product_ids" t-as="prod">
+                                        <tr>
+                                            <td style="border:1px solid #ddd; padding:6px;">
+                                                <t t-esc="prod.name"/>
+                                            </td>
+                                            <td style="border:1px solid #ddd; padding:6px;">
+                                                <t t-esc="prod.price"/>
+                                                <t t-esc="prod.currency_id.symbol or ''"/>
+                                            </td>
+                                            <td style="border:1px solid #ddd; padding:6px;">
+                                                <t t-esc="prod.description if prod.description else '-'"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!-- REPORT ACTION -->
+        <record id="action_category_report" model="ir.actions.report">
+            <field name="name">Category Report</field>
+            <field name="model">fast.food.category</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">fast_food.report_category</field>
+            <field name="report_file">fast_food.report_category</field>
+            <field name="print_report_name">'Category - %s' % object.name</field>
+            <field name="binding_model_id" ref="model_fast_food_category"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

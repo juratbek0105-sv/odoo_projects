@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Order Line List View -->
+        <record id="order_line_list" model="ir.ui.view">
+            <field name="name">fast.food.order.line.list</field>
+            <field name="model">fast.food.order.line</field>
+            <field name="arch" type="xml">
+                <list editable="bottom">
+                    <field name="order_id"/>
+                    <field name="product_id"/>
+                    <field name="quantity"/>
+                    <field name="price_unit"/>
+                    <field name="subtotal" readonly="1"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Order Line Form View -->
+        <record id="order_line_form" model="ir.ui.view">
+            <field name="name">fast.food.order.line.form</field>
+            <field name="model">fast.food.order.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="order_id"/>
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="price_unit"/>
+                            <field name="subtotal" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Order Line Kanban View -->
+        <record id="order_line_kanban" model="ir.ui.view">
+            <field name="name">fast.food.order.line.kanban</field>
+            <field name="model">fast.food.order.line</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="order_id"/>
+                    <field name="product_id"/>
+                    <field name="quantity"/>
+                    <field name="price_unit"/>
+                    <field name="subtotal"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_global_click">
+                                <strong>Order: <t t-esc="record.order_id.value"/></strong><br/>
+                                Product: <t t-esc="record.product_id.value"/><br/>
+                                Quantity: <t t-esc="record.quantity.value"/><br/>
+                                Price: <t t-esc="record.price_unit.value"/> UZS<br/>
+                                Subtotal: <t t-esc="record.subtotal.value"/> UZS
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+    </data>
+</odoo>
