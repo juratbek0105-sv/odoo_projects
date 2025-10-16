@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_task_management" string="Task Management">
+            <menuitem id="menu_project" action="action_project"/>
+            <menuitem id="menu_task" action="action_task"/>
+        </menuitem>
+    </data>
+</odoo>

@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_task_ceo,access_task_ceo,model_task_management_task,group_ceo,1,0,0,0
+access_project_ceo,access_project_ceo,model_task_management_project,group_ceo,1,0,0,0
+
+access_task_team_lead,access_task_team_lead,model_task_management_task,group_team_lead,1,1,1,1
+access_project_team_lead,access_project_team_lead,model_task_management_project,group_team_lead,1,1,1,1
+
+access_task_developer,access_task_developer,model_task_management_task,group_developer,1,0,0,0
+access_project_developer,access_project_developer,model_task_management_project,group_developer,1,0,0,0

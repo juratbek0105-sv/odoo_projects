@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record id="category_task" model="ir.module.category">
+            <field name="name">Task Management</field>
+            <field name="parent_id" ref="base.module_category_administration"/>
+        </record>
+
+        <record id="group_ceo" model="res.groups">
+            <field name="name">CEO</field>
+            <field name="category_id" ref="category_task"/>
+        </record>
+
+        <record id="group_team_lead" model="res.groups">
+            <field name="name">Team Lead</field>
+            <field name="category_id" ref="category_task"/>
+        </record>
+
+        <record id="group_developer" model="res.groups">
+            <field name="name">Developer</field>
+            <field name="category_id" ref="category_task"/>
+        </record>
+    </data>
+</odoo>
